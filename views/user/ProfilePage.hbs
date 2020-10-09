@@ -1,0 +1,37 @@
+{{> header}}
+<div class="container">
+    <h1>Profile</h1>
+    <div class="row">
+        <div class="col-lg-6">
+            <div class="jumbotron">
+                <div class="col-lg-6">
+                    {{#if user.avatarUrl}}
+                        <img class="avatar" src="/{{ user.avatarUrl }}" alt="avatar-{{ user.name }}">
+                        {{else}}
+                        <h2>No avatar!</h2>
+                    {{/if}}
+                </div>
+            </div>
+        </div>
+        <div class="col-lg-6">
+            <div class="jumbotron">
+                <form action="/app/profile" method="post" enctype="multipart/form-data">
+                    <h3>Your email: <strong style="text-decoration: underline">{{ user.email }}</strong></h3>
+                    <div class="form-group">
+                        <label for="name">Your name:</label>
+                        <input name="name" type="text" class="form-control" id="name" required value="{{ user.name }}">
+                    </div>
+
+                    <div class="custom-file">
+                        <input type="file" name="avatar" class="custom-file-input" id="inputGroupFile01" aria-describedby="inputGroupFileAddon01">
+                        <label class="custom-file-label" for="inputGroupFile01">Avatar</label>
+
+                        <input type="hidden" name="_csrf" value="{{ csrf }}">
+
+                        <button style="margin-top: 20px" type="submit" class="btn btn-success">Change</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>

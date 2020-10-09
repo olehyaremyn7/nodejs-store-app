@@ -1,0 +1,36 @@
+{{> header}}
+<div class="container">
+    <h1>Sneakers</h1>
+    <div class="jumbotron">
+        {{#if products.length}}
+            <div class="row">
+                {{#each products}}
+                    <div class="col-sm-6 col-md-4">
+                        <div class="card card-prod">
+                            <img src="{{ image }}" class="card-img-top" alt="{{ title }}">
+                            <div class="card-body">
+                                <h5 class="card-title">{{ title }}</h5>
+                                <h4 class="card-text card-price">{{ price }}</h4>
+                                <a href="/app/products/{{ _id }}" target="_blank" class="btn btn-primary">Open sneakers page</a>
+                                {{#if @root.isAuth}}
+
+                                    {{#ifEquel userID._id @root.userID}}
+                                        <a href="/app/products/{{ _id }}/edit?allow=true" class="btn btn-danger">Edit sneakers</a>
+                                    {{/ifEquel}}
+
+                                    <form action="/app/cart/add" method="post">
+                                        <input type="hidden" name="id" value="{{ _id }}">
+                                        <input type="hidden" name="_csrf" value="{{ @root.csrf }}">
+                                        <button type="submit" class="btn btn-success btn-buy">Buy</button>
+                                    </form>
+                                {{/if}}
+                            </div>
+                        </div>
+                    </div>
+                {{/each}}
+            </div>
+            {{else}}
+            <p class="no-prod">No sneakers!</p>
+        {{/if}}
+    </div>
+</div>

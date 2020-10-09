@@ -1,0 +1,162 @@
+.container h1 {
+    margin-top: 50px;
+}
+
+.jumbotron {
+    margin-top: 20px;
+}
+
+.jumbotron .row {
+    margin-left: 15px;
+}
+
+.j-news {
+    margin-top: 20px;
+}
+
+.no-prod {
+    text-align: center;
+    font-size: 25px;
+}
+
+.card-prod {
+    width: 18rem;
+    height: 35rem;
+    margin-top: 20px;
+}
+
+.card-body .card-title {
+    font-size: 20px;
+    margin-bottom: 20px;
+}
+
+.card-body a {
+    margin-top: 10px;
+}
+
+.btn-buy {
+    margin-top: 10px;
+}
+
+.product {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.product h1 {
+    margin-bottom: 20px;
+}
+
+.product img {
+    max-width: 600px;
+    margin-bottom: 10px;
+}
+
+.product .prod-price {
+    font-size: 3.5rem;
+    font-weight: 600;
+}
+
+.product p {
+    margin-top: 10px;
+}
+
+.cart-price-p {
+    font-size: 25px;
+    padding-top: 10px;
+}
+
+.cart-price {
+    font-size: 25px;
+}
+
+.btn-checkout {
+    margin-top: 5px;
+}
+
+#orders {
+    padding-left: 18px;
+}
+
+.card-order {
+    width: 19rem;
+    height: 22rem;
+    margin-top: 20px;
+}
+
+.order-id {
+    font-weight: 600;
+    font-size: 23px;
+}
+
+.order-small-id {
+    font-size: 18px;
+    text-decoration: underline;
+    color: gray;
+}
+
+.order-date {
+    margin-top: 10px;
+    font-size: 20px;
+    color: #343A40;
+}
+
+.order-info {
+    font-size: 18px;
+}
+
+.order-info em {
+    font-weight: 600;
+}
+
+.order-li {
+    font-weight: 600;
+    font-size: 18px;
+    color: #343A40
+}
+
+.order-price-p {
+    font-weight: 600;
+    font-size: 18px;
+}
+
+.order-price {
+    color: darkred;
+}
+
+.nav-pills {
+    text-align: center;
+    margin-top: -25px;
+}
+
+.tab-content {
+    margin-top: 50px;
+}
+
+#login {
+    margin-bottom: 30px;
+}
+
+#register {
+    margin-bottom: 30px;
+}
+
+.reset-form {
+    padding-bottom: 35px;
+    justify-content: center;
+    height: 100%;
+    width: 450px;
+    margin: 0 auto;
+}
+
+.reset-form h1 {
+    margin-bottom: 25px;
+}
+
+.avatar {
+    margin-left: 70px;
+    max-width: 300px;
+    height: auto;
+}

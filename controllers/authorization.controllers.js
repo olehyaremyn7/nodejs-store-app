@@ -1,0 +1,181 @@
+const crypto = require('crypto')
+const User = require('../models/User')
+const bcrypt = require('bcrypt')
+const {validationResult} = require('express-validator/check')
+// const config = require('../config/keys.config')
+// const nodemailer = require('nodemailer')
+// const sendgrid = require('nodemailer-sendgrid-transport')
+// const reqEmail = require('../emails/registration.emails')
+// const resetEmail = require('../emails/reset.emails')
+
+// const transporter = nodemailer.createTransport(sendgrid({
+//     auth: {api_key: config.sendgridKeyAPI},
+// }))
+
+exports.authorizationPageController = async (req, res) => {
+    try {
+        res.render('authorization/AuthorizationPage', {
+            title: 'Authorization page',
+            isLogin: true,
+            loginError: req.flash('loginError'),
+            registerError: req.flash('registerError')
+        })
+    } catch (e) {
+        console.log(e)
+    }
+}
+
+exports.logoutController = async (req, res) => {
+    req.session.destroy(() => {
+        res.redirect('/app/authorization#login')
+    })
+}
+
+
+exports.loginPostController = async (req, res) => {
+    try {
+        const {email, password} = req.body
+        const candidate = await User.findOne({ email })
+
+        if (candidate) {
+            const similaritiesFound = await bcrypt.compare(password, candidate.password)
+
+            if (similaritiesFound) {
+                req.session.user = candidate;
+                req.session.isAuthenticated = true
+                req.session.save(err => {
+                    if (err) {
+                        throw err
+                    }
+                    res.redirect('/app/home')
+                })
+            } else {
+                req.flash('loginError', 'Wrong password!')
+                await res.redirect('/app/authorization#login')
+            }
+
+        } else {
+            req.flash('loginError', 'There is no such user!')
+            await res.redirect('/app/authorization#login')
+        }
+
+    } catch (e) {
+        console.log(e)
+    }
+}
+
+exports.registrationPostController = async (req, res) => {
+    try {
+        const { email, password, name } = req.body
+        const errors = validationResult(req)
+
+        if (!errors.isEmpty()) {
+            req.flash('registerError', errors.array()[0].msg)
+            return res.status(422).redirect('/app/authorization#register')
+        }
+
+        const hashPassword = await bcrypt.hash(password, 10)
+        const user = new User({
+            email: email,
+            password: hashPassword,
+            name: name,
+            cart: {items: []}
+        })
+        await user.save();
+        //await transporter.sendMail(reqEmail(email))
+        res.redirect('/app/authorization#login')
+
+    } catch (e) {
+        console.log(e)
+    }
+}
+
+exports.resetController = async (req, res) => {
+    try {
+        res.render('authorization/Reset', {
+            title: 'Restore access',
+            error: req.flash('error')
+        })
+    } catch (e) {
+        console.log(e)
+    }
+}
+
+exports.resetPostController = (req, res) => {
+    try {
+        crypto.randomBytes(32, async (err, buffer) => {
+            if (err) {
+                req.flash('error', 'Error! Try again!')
+                res.redirect('app/authorization/reset')
+            }
+
+            const token = buffer.toString('hex')
+            const candidate = await User.findOne({ email: req.body.email })
+
+            if (candidate) {
+                candidate.resetToken = token
+                candidate.resetTokenExp = Date.now() + 60 * 60 * 1000
+                await candidate.save()
+                // await transporter.sendMail(resetEmail(
+                //     candidate.email,
+                //     token
+                // ))
+                res.redirect('/app/authorization#login')
+            } else {
+                req.flash('error', 'There is no such email!')
+                res.redirect('/app/authorization/reset')
+            }
+        })
+    } catch (e) {
+        console.log(e)
+    }
+}
+
+exports.newPasswordController = async (req, res) => {
+    if (!req.params.token) {
+        return res.redirect('/app/authorization#login')
+    }
+
+    try {
+        const user = await User.findOne({
+            resetToken: req.params.token,
+            resetTokenExp: {$gt: Date.now()}
+        })
+
+        if (!user) {
+            return res.redirect('/app/authorization#login')
+        } else {
+            res.render('/app/authorization/password', {
+                title: 'Restore access',
+                error: req.flash('error'),
+                userID: user._id.toString(),
+                token: req.params.token
+            })
+        }
+    } catch (e) {
+        console.log(e)
+    }
+}
+
+exports.newPasswordPostController = async (req, res) => {
+    try {
+        const user = await User.findOne({
+            _id: req.body.userID,
+            resetToken: req.body.token,
+            resetTokenExp: {$gt: Date.now()}
+        })
+
+        if (user) {
+            user.password = await bcrypt.hash(req.body.password, 10)
+            user.resetToken = undefined
+            user.resetTokenExp = undefined
+            await user.save()
+            res.redirect('/app/authorization#login')
+        } else {
+            req.flash('loginError', 'The token has run out of time!')
+            res.redirect('/app/authorization#login')
+        }
+    } catch (e) {
+        console.log(e)
+    }
+}

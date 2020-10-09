@@ -1,0 +1,37 @@
+{{> header}}
+<div class="container">
+    <h1>Cart</h1>
+    <div class="jumbotron" id="cart">
+        {{#if products.length}}
+            <table class="table table-striped table-dark">
+                <thead>
+                <tr>
+                    <th scope="col">#</th>
+                    <th scope="col">Name</th>
+                    <th scope="col">Quantity</th>
+                    <th scope="col">Actions</th>
+                </tr>
+                </thead>
+                <tbody>
+                    {{#each products}}
+                        <tr>
+                            <th scope="row">{{@index}}</th>
+                            <td>{{ title }}</td>
+                            <td>{{ count }}</td>
+                            <td>
+                                <button class="btn btn-info js-remove" data-id="{{ id }}" data-csrf="{{ @root.csrf }}">Delete</button>
+                            </td>
+                        </tr>
+                    {{/each}}
+                </tbody>
+            </table>
+            <p class="cart-price-p"><strong>Total price: </strong><span class="cart-price card-price">{{ price }}</span></p>
+            <form action="/app/orders" method="post">
+                <input type="hidden" name="_csrf" value="{{ csrf }}">
+                <button type="submit" class="btn btn-success btn-checkout">Checkout</button>
+            </form>
+        {{else}}
+            <p class="no-prod">No items in Cart!</p>
+        {{/if}}
+    </div>
+</div>

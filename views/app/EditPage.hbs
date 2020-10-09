@@ -1,0 +1,37 @@
+{{> header}}
+<div class="container">
+    <h1 style="margin-top: 50px;">Edit {{ product.title }}</h1>
+
+    <div class="jumbotron">
+        <form action="/app/products/edit" method="POST">
+            <div class="form-group">
+                <label for="image">Sneakers image url</label>
+                <input name="image" type="text" class="form-control" id="image" required value="{{ product.image }}">
+            </div>
+
+            <div class="form-group">
+                <label for="title">The name of the sneakers</label>
+                <input name="title" type="text" class="form-control" id="title" required value="{{ product.title }}">
+            </div>
+
+            <div class="form-group">
+                <label for="price">Sneakers price</label>
+                <input name="price" type="number" class="form-control" id="price" required value="{{ product.price }}">
+            </div>
+
+            <div class="form-group">
+                <label for="description">Sneakers description</label>
+                <input name="description" type="text" class="form-control" id="description" required value="{{ product.description }}">
+            </div>
+
+            <input type="hidden" name="id" value="{{ product._id }}">
+            <input type="hidden" name="_csrf" value="{{ csrf }}">
+            <button style="margin-bottom: 10px;" class="btn btn-success" type="submit">Edit sneakers</button>
+        </form>
+        <form action="/app/products/remove" method="POST">
+            <input type="hidden" name="id" value="{{ product._id }}">
+            <input type="hidden" name="_csrf" value="{{ csrf }}">
+            <button type="submit" class="btn btn-danger">Remove sneakers</button>
+        </form>
+    </div>
+</div>

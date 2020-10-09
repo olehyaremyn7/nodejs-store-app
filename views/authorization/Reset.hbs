@@ -1,0 +1,25 @@
+{{> header}}
+<div class="container">
+    <h1>Restore access</h1>
+    <div class="jumbotron jumbotron-reset">
+
+        {{#if error}}
+            <div class="alert alert-danger" style="text-align: center" role="alert">
+                {{ error }}
+            </div>
+        {{/if}}
+
+        <div class="reset-form">
+            <h1 style="text-align: center">Forget password?</h1>
+            <form action="/app/authorization/reset" method="POST">
+                <div class="form-group">
+                    <label for="email">Email address</label>
+                    <input name="email" id="email" type="email" class="form-control" required>
+                </div>
+
+                <input type="hidden" name="_csrf" value="{{ csrf }}">
+                <button class="btn btn-primary" style="width: 100%; margin-top: 10px" type="submit">Reset</button>
+            </form>
+        </div>
+    </div>
+</div>

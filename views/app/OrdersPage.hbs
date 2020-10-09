@@ -1,0 +1,38 @@
+{{> header }}
+<div class="container">
+    <h1>Orders</h1>
+    <div class="jumbotron" id="orders">
+        {{#if orders.length}}
+            <div class="row">
+                {{#each orders}}
+                    <div class="col-sm-6 col-md-4">
+                        <div class="card card-order">
+                            <div class="card-body">
+                                <span class="card-text order-id">
+                                    Order <small class="order-small-id">{{ _id }}</small>
+                                </span>
+                                <p class="card-text order-date">{{ date }}</p>
+                                <p class="card-text order-info"><em>{{ user.userID.name }}</em> ({{ user.userID.email }})</p>
+
+                                <ol>
+                                    {{#each products}}
+                                        <li class="order-li">
+                                            {{ product.title }} ( x <strong>{{ count }}</strong> )
+                                        </li>
+                                    {{/each}}
+                                </ol>
+
+                                <hr>
+
+                                <p class="card-text order-price-p">Price: <span class="card-text order-price card-price">{{ price }}</span></p>
+                            </div>
+                        </div>
+                    </div>
+                {{/each}}
+            </div>
+        </div>
+        {{else}}
+            <p class="no-prod">No orders! Please, buy something!</p>
+        {{/if}}
+    </div>
+</div>
